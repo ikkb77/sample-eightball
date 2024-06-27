@@ -1,62 +1,42 @@
-name: Fortify ScanCentral SAST Scan
-on:
-  workflow_dispatch:
-  push:
-    # Master or main branch that you want to trigger this workflow for
-    branches: [master]
-  pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [master]
+name: 'Perform SAST scan'
+description: 'Perform a SAST scan on ScanCentral SAST'
+author: 'Fortify'
+runs:
+  using: composite
+  steps:
+    - name: Check out source code
+      uses: actions/checkout@v4
+    - name: Run ScanCentral SAST Scan
+      uses: fortify/github-action/sc-sast-scan@v1
+      env:
+        SSC_URL: ${{secrets.SSC_URL}}
+        SSC_TOKEN: ${{secrets.SSC_TOKEN}}
+        SC_SAST_TOKEN: ${{secrets.CLIENT_AUTH_TOKEN}}
+        # EXTRA_SC_SAST_LOGIN_OPTS: --socket-timeout=60s
+        # SSC_APPVERSION: MyApp:MyVersion
+        # EXTRA_PACKAGE_OPTS: -bf custom-pom.xml
+        SC_SAST_SENSOR_VERSION: 23.2
+        # DO_WAIT: true
+        # DO_EXPORT: true
+        # TOOL_DEFINITIONS: https://ftfy.mycompany.com/tool-definitions/v1/tool-definitions.yaml.zip
+  steps:
+    - uses: fortify/github-action/setup@main
+      with:
+        export-path: false
+        fcli: action-default
+    - uses: fortify/github-action/internal/sc-sast-login@main
+    - uses: fortify/github-action/package@main
+    - uses: fortify/github-action/internal/run@main
+      with:
+        cmd: '"${FCLI_CMD}" sc-sast scan start --publish-to "${SSC_APPVERSION}" -p package.zip -v "${SC_SAST_SENSOR_VERSION}" --store sc_sast_scan ${EXTRA_SC_SAST_SCAN_OPTS}'
+    - uses: fortify/github-action/internal/run@main
+      if: env.DO_WAIT == 'true' || env.DO_EXPORT == 'true'
+      with:
+        cmd: '"${FCLI_CMD}" sc-sast scan wait-for ::sc_sast_scan::'
+    - uses: fortify/github-action/internal/sc-sast-logout@main
+    - if: env.DO_EXPORT == 'true'
+      uses: fortify/github-action/ssc-export@main
 
-jobs:                                                  
-  Fortify-SAST:
-    # Use the appropriate runner for building your source code
-    runs-on: ubuntu-latest 
-
-    steps:
-      # Check out source code
-      - name: Check Out Source Code
-        uses: actions/checkout@v2
-        with:
-          # Fetch at least the immediate parents so that if this is a pull request then we can checkout the head.
-          fetch-depth: 2
-      # If this run was triggered by a pull request event, then checkout the head of the pull request instead of the merge commit.
-      - run: git checkout HEAD^2
-        if: ${{ github.event_name == 'pull_request' }} 
-
-      # Java is required to run ScanCentral Client, and may be required for your build
-      # Java version to use depends on the Java version required to run your build (if any),
-      # and the Java version supported by the ScanCentral Client version that you are running
-      - name: Setup Java
-        uses: actions/setup-java@v1
-        with:
-          java-version: 17
-
-      ### Set up Fortify ScanCentral Client ###
-      - name: Download Fortify ScanCentral Client
-        uses: fortify/gha-setup-scancentral-client@v1   
-        with:
-          version: 23.2.0                                      # On-prem customers should specify a client version that matches their ScanCentral environment
-                                                               # FoD customers usually should not specify a version but rather rely on the default version
-          client-auth-token: ${{ secrets.CLIENT_AUTH_TOKEN }}  # Optional, but required if ScanCentral Controller requires client authentication
-
-      ### Run Fortify ScanCentral Client ###
-      # Update BUILD_OPTS based on the ScanCentral Client documentation and your project's included tech stack(s).
-      #   ScanCentral Client will download dependencies for maven, gradle and msbuild projects.
-      #   For other build tools, add your build commands to the workflow to download necessary dependencies and prepare according to Fortify SCA documentation.
-      - name: Perform SAST Scan
-        run: scancentral -url ${SC_CONTROLLER_URL} start $BUILD_OPTS -upload -application $APPLICATION -version $VERSION -uptoken $SSC_UPLOAD_TOKEN
-        env:                                            
-          SC_CONTROLLER_URL: ${{ secrets.SC_CONTROLLER_URL }}
-          SSC_UPLOAD_TOKEN: ${{ secrets.SSC_UPLOAD_TOKEN }}
-          APPLICATION: "sample"
-          VERSION: "eightball"
-          BUILD_OPTS: "-bt none"
-
-      ### Archive ScanCentral Client logs on failure ###
-      - name: Save ScanCentral Logs
-        uses: actions/upload-artifact@v2                
-        if: failure()
-        with:
-           name: scancentral-logs
-           path: ~/.fortify/scancentral/log
+branding:
+  icon: 'shield'
+  color: 'blue'
