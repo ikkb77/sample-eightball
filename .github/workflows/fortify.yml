@@ -1,3 +1,0 @@
-- name: Fortify AST Scan
-  uses: fortify/github-action@v1.2.2
-            
