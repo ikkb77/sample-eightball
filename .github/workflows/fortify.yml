@@ -91,7 +91,7 @@ jobs:
       - uses: fortify/github-action/package@main
       - uses: fortify/github-action/internal/run@main
         with:
-          cmd: '"${FCLI_CMD}" sc-sast scan start --publish-to "59" -p package.zip -v "24.2" --store sc_sast_scan -bt none'
+          cmd: '"${FCLI_CMD}" sc-sast scan start --publish-to "59" -p package.zip -v "24.2" --store sc_sast_scan'
       - uses: fortify/github-action/internal/run@main
         if: env.DO_WAIT == 'true' || env.DO_EXPORT == 'true'
         with:
