@@ -87,7 +87,7 @@ jobs:
         with:
           export-path: false
           fcli: action-default
-      - uses: fortify/github-action/internal/sc-sast-login@main
+      # - uses: fortify/github-action/internal/sc-sast-login@main
       - uses: fortify/github-action/package@main
       - uses: fortify/github-action/internal/run@main
         with:
