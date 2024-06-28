@@ -1,0 +1,35 @@
+name: Fortify ScanCentral Remote Scan
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  fortify-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17' # ScanCentral Client requires Java
+
+      - name: Download Fortify ScanCentral Client
+        run: |
+          curl -L -o scancentral-client.zip "https://your-fortify-server.com/scancentral-client.zip"
+          unzip scancentral-client.zip -d scancentral-client
+
+      - name: Start Fortify ScanCentral Remote Scan
+        run: |
+          ./scancentral-client/bin/scancentral -url https://your-fortify-server.com/ -authtoken your_auth_token start -bt "MyProject" -sscurl "https://your-sscurl.com/"
+          # Ensure the command is adjusted according to your needs and Fortify documentation
+
+      - name: Clean up
+        if: always()
+        run: rm -rf scancentral-client
