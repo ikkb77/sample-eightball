@@ -1,6 +1,6 @@
 name: 'Perform SAST scan'
 description: 'Perform a SAST scan on ScanCentral SAST'
-author: 'Fortify'
+author: 'Fortify '
 runs:
   using: composite
   steps:
