@@ -1,29 +1,13 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-################################################################################################################################################
-# Fortify Application Security provides your team with solutions to empower DevSecOps practices, enable cloud transformation, and secure your  #
-# software supply chain. To learn more about Fortify, start a free trial or contact our sales team, visit fortify.com.                         #
-#                                                                                                                                              #
-# Use this starter workflow as a basis for integrating Fortify Application Security Testing into your GitHub workflows. This template          #
-# demonstrates the steps to package the code+dependencies, initiate a scan, and optionally import SAST vulnerabilities into GitHub Security    #
-# Code Scanning Alerts. Additional information is available in the workflow comments and the Fortify AST Action / fcli / Fortify product       #
-# documentation. If you need additional assistance, please contact Fortify support.                                                            #
-################################################################################################################################################
-
 name: Fortify AST Scan
 
 # Customize trigger events based on your DevSecOps process and/or policy
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
   pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ "master" ]
+    branches: [ "main" ]
   schedule:
-    - cron: '25 21 * * 4'
+    - cron: '19 14 * * 2'
   workflow_dispatch:
 
 jobs:
@@ -52,50 +36,51 @@ jobs:
       # required, you can use sub-actions like fortify/github-action/setup@v1 to set up the various Fortify tools
       # and run them directly from within your pipeline; see https://github.com/fortify/github-action#readme for
       # details.
-      - name: Run ScanCentral SAST Scan configuration
-        uses: fortify/github-action@a92347297e02391b857e7015792cd1926a4cd418
-        with:
-          sast-scan: true
-        env:
-          ### Required configuration when integrating with Fortify on Demand
-          #FOD_URL: https://ams.fortify.com
-          #FOD_TENANT: ${{secrets.FOD_TENANT}}
-          #FOD_USER: ${{secrets.FOD_USER}}
-          #FOD_PASSWORD: ${{secrets.FOD_PAT}}
-          ### Optional configuration when integrating with Fortify on Demand
-          # EXTRA_PACKAGE_OPTS: -oss                       # Extra 'scancentral package' options, like '-oss'' if
-                                                           # Debricked SCA scan is enabled on Fortify on Demand
-          # EXTRA_FOD_LOGIN_OPTS: --socket-timeout=60s     # Extra 'fcli fod session login' options
-          # FOD_RELEASE: MyApp:MyRelease                   # FoD release name, default: <org>/<repo>:<branch>; may
-                                                           # replace app+release name with numeric release ID
-          # DO_WAIT: true                                  # Wait for scan completion, implied if 'DO_EXPORT: true'
-          # DO_EXPORT: true                                # Export SAST results to GitHub code scanning dashboard
-          ### Required configuration when integrating with Fortify Hosted / Software Security Center & ScanCentral
-          SSC_URL: ${{secrets.SSC_URL}}                            # SSC URL
-          SSC_TOKEN: ${{secrets.SSC_TOKEN}}                        # SSC CIToken or AutomationToken
-          SC_SAST_TOKEN: ${{secrets.SC_SAST_TOKEN}}                # ScanCentral SAST client auth token
-          SC_SAST_SENSOR_VERSION: 24.2 # Sensor version on which to run the scan;
-                                                                     # usually defined as organization or repo variable
-          ### Optional configuration when integrating with Fortify Hosted / Software Security Center & ScanCentral
-          # EXTRA_SC_SAST_LOGIN_OPTS: --socket-timeout=60s # Extra 'fcli sc-sast session login' options
-          SSC_APPVERSION: 59                # SSC application version, default: <org>/<repo>:<branch>
-          EXTRA_PACKAGE_OPTS: -bt none        # Extra 'scancentral package' options
-          DO_WAIT: true                                  # Wait for scan completion, implied if 'DO_EXPORT: true'
-          DO_EXPORT: true                                # Export SAST results to GitHub code scanning dashboard
-      - name: Run ScanCentral SAST Scan
+      #      - name: Run FoD SAST Scan
+      #        uses: fortify/github-action@a92347297e02391b857e7015792cd1926a4cd418
+      #        with:
+      #          sast-scan: true
+      #        env:
+      #          DO_WAIT: false
+      #          DO_EXPORT: true
+      #          SSC_URL: ${{ secrets.SSC_URL }}
+      #          SSC_TOKEN: ${{ secrets.SSC_TOKEN }}
+      #          SC_SAST_TOKEN: ${{ secrets.SC_SAST_TOKEN }}
+      #          SC_SAST_SENSOR_VERSION: ${{ vars.SC_SAST_SENSOR_VERSION }}
+
+      - name: Perform SAST scan
         uses: fortify/github-action/setup@main
         with:
           export-path: false
           fcli: action-default
-      - uses: fortify/github-action/internal/sc-sast-login@main
-      - uses: fortify/github-action/package@main
-      - uses: fortify/github-action/internal/run@main
+
+      - name: Fortify SAST Login
+        uses: fortify/github-action/internal/sc-sast-login@main
+        env:
+          DO_WAIT: false
+          DO_EXPORT: true
+          SSC_URL: ${{ secrets.SSC_URL }}
+          SSC_TOKEN: ${{ secrets.SSC_TOKEN }}
+          SC_SAST_TOKEN: ${{ secrets.SC_SAST_TOKEN }}
+          SC_SAST_SENSOR_VERSION: ${{ vars.SC_SAST_SENSOR_VERSION }}
+
+      - name: Package for SAST-
+        uses: fortify/github-action/package@main
+
+      - name: Start SAST scan-
+        uses: fortify/github-action/internal/run@main
         with:
-          cmd: '"${FCLI_CMD}" sc-sast scan start --publish-to "59" -p package.zip -v "24.2" --store sc_sast_scan'
-      - uses: fortify/github-action/internal/run@main
-        if: env.DO_WAIT == 'true' || env.DO_EXPORT == 'true'
+          cmd: '"${FCLI_CMD}" sc-sast scan start --publish-to "github_action:test1" -p package.zip -v "24.2.0.0150"'
+
+      - name: Wait for SAST scan to complete-
+        if: env.DO_WAIT == 'false' || env.DO_EXPORT == 'True'
+        uses: fortify/github-action/internal/run@main
         with:
           cmd: '"${FCLI_CMD}" sc-sast scan wait-for ::sc_sast_scan::'
-      - uses: fortify/github-action/internal/sc-sast-logout@main
-      - if: env.DO_EXPORT == 'true'
+
+      - name: Logout from Fortify SAST
+        uses: fortify/github-action/internal/sc-sast-logout@main
+
+      - name: Export SAST results to GitHub
+        if: env.DO_EXPORT == 'True'
         uses: fortify/github-action/ssc-export@main
