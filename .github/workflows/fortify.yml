@@ -13,7 +13,7 @@ on:
 jobs:
   Fortify-AST-Scan:
     # Use the appropriate runner for building your source code. Ensure dev tools required to build your code are present and configured appropriately (MSBuild, Python, etc).
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 #    permissions:
 #      actions: read
 #      contents: read
@@ -28,25 +28,8 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v4.2.1
         with:
-          java-version: '17'
+          java-version: '11'
           distribution: 'temurin'
-
-      # Perform SAST and optionally SCA scan via Fortify on Demand/Fortify Hosted/Software Security Center, then
-      # optionally export SAST results to the GitHub code scanning dashboard. In case further customization is
-      # required, you can use sub-actions like fortify/github-action/setup@v1 to set up the various Fortify tools
-      # and run them directly from within your pipeline; see https://github.com/fortify/github-action#readme for
-      # details.
-      #      - name: Run FoD SAST Scan
-      #        uses: fortify/github-action@a92347297e02391b857e7015792cd1926a4cd418
-      #        with:
-      #          sast-scan: true
-      #        env:
-      #          DO_WAIT: false
-      #          DO_EXPORT: true
-      #          SSC_URL: ${{ secrets.SSC_URL }}
-      #          SSC_TOKEN: ${{ secrets.SSC_TOKEN }}
-      #          SC_SAST_TOKEN: ${{ secrets.SC_SAST_TOKEN }}
-      #          SC_SAST_SENSOR_VERSION: ${{ vars.SC_SAST_SENSOR_VERSION }}
 
 #      - name: Perform SAST scan
 #        uses: fortify/github-action/setup@main
@@ -56,19 +39,17 @@ jobs:
 
       - name: Setup Fortify tools
         uses: fortify/github-action/setup@1.2.2
-        env:
-          SCANCENTRAL_JAVA_HOME: "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.11-9/x64"
         with:
           tool-definitions: https://github.com/fortify/tool-definitions/releases/download/v1/tool-definitions.yaml.zip
           export-path: true
           fcli: skip
-          sc-client: 24.2
+          sc-client: 23.2
           fod-uploader: skip
           vuln-exporter: skip
           bugtracker-utility: skip
           debricked-cli: skip
       - name: Run fcli from PATH
-        run: echo  ${SCANCENTRAL_JAVA_HOME}
+        run: scancentral --version
       - name: Run fcli using FCLI_CMD environment variable
         run: ${SC_CLIENT_CMD} -h
 
