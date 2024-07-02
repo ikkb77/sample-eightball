@@ -30,7 +30,6 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
-      - run: java -version
 
       # Perform SAST and optionally SCA scan via Fortify on Demand/Fortify Hosted/Software Security Center, then
       # optionally export SAST results to the GitHub code scanning dashboard. In case further customization is
