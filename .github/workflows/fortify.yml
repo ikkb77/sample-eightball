@@ -68,7 +68,7 @@ jobs:
       - name: Run fcli from PATH
         run: java -version
       - name: Run fcli using FCLI_CMD environment variable
-        run: ${SC_CLIENT_CMD} -V
+        run: ${SC_CLIENT_CMD} -v
 
 #      - name: Fortify SAST Login
 #        uses: fortify/github-action/internal/sc-sast-login@main
