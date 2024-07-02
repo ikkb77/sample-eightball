@@ -30,6 +30,7 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+        run: java -v
 
       # Perform SAST and optionally SCA scan via Fortify on Demand/Fortify Hosted/Software Security Center, then
       # optionally export SAST results to the GitHub code scanning dashboard. In case further customization is
@@ -66,7 +67,7 @@ jobs:
           bugtracker-utility: skip
           debricked-cli: skip
       - name: Run fcli from PATH
-        run: scancentral --version
+        run: java -v
       - name: Run fcli using FCLI_CMD environment variable
         run: ${SC_CLIENT_CMD} -h
 
