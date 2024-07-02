@@ -53,24 +53,24 @@ jobs:
       - name: Run fcli using FCLI_CMD environment variable
         run: ${SC_CLIENT_CMD} -h
 
-#      - name: Fortify SAST Login
-#        uses: fortify/github-action/internal/sc-sast-login@main
-#        env:
-#          DO_WAIT: false
-#          DO_EXPORT: true
-#          SSC_URL: ${{ secrets.SSC_URL }}
-#          SSC_TOKEN: ${{ secrets.SSC_TOKEN }}
-#          SC_SAST_TOKEN: ${{ secrets.SC_SAST_TOKEN }}
-#          SC_SAST_SENSOR_VERSION: ${{ vars.SC_SAST_SENSOR_VERSION }}
-#
-#      - name: Package for SAST
-#        uses: fortify/github-action/package@main
-#
-#      - name: Start SAST scan
-#        uses: fortify/github-action/internal/run@main
-#        with:
-#          # cmd: '"${FCLI_CMD}" sc-sast scan start --publish-to "github_action:test1" -p package.zip -v "24.2.0.0150"'
-#          cmd: '"${FCLI_CMD}" sc-sast scan start --publish-to "github_action:test1" -p package.zip -v "24.2.0.0150"'
+      - name: Fortify SAST Login
+        uses: fortify/github-action/internal/sc-sast-login@main
+        env:
+          DO_WAIT: false
+          DO_EXPORT: true
+          SSC_URL: ${{ secrets.SSC_URL }}
+          SSC_TOKEN: ${{ secrets.SSC_TOKEN }}
+          SC_SAST_TOKEN: ${{ secrets.SC_SAST_TOKEN }}
+          SC_SAST_SENSOR_VERSION: ${{ vars.SC_SAST_SENSOR_VERSION }}
+
+      - name: Package for SAST
+        uses: fortify/github-action/package@main
+
+      - name: Start SAST scan
+        uses: fortify/github-action/internal/run@main
+        with:
+          # cmd: '"${FCLI_CMD}" sc-sast scan start --publish-to "github_action:test1" -p package.zip -v "24.2.0.0150"'
+          cmd: '"${SC_CLIENT_CMD}" -url http://13.209.176.153:8081/scancentral-ctrl/ start'
 #
 #      - name: Wait for SAST scan to complete-
 #        if: env.DO_WAIT == 'false' || env.DO_EXPORT == 'True'
