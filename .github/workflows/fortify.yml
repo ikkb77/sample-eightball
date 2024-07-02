@@ -26,10 +26,10 @@ jobs:
 
       # Java is required to run the various Fortify utilities. Ensuring proper version is installed on the runner.
       - name: Setup Java
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v4.2.1
         with:
           java-version: 17
-          distribution: 'temurin'
+          #distribution: 'temurin'
 
       # Perform SAST and optionally SCA scan via Fortify on Demand/Fortify Hosted/Software Security Center, then
       # optionally export SAST results to the GitHub code scanning dashboard. In case further customization is
