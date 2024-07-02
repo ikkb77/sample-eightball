@@ -60,7 +60,7 @@ jobs:
           tool-definitions: https://github.com/fortify/tool-definitions/releases/download/v1/tool-definitions.yaml.zip
           export-path: true
           fcli: latest
-          sc-client: 23.2
+          sc-client: 24.2
           fod-uploader: latest
           vuln-exporter: v2
           bugtracker-utility: skip
