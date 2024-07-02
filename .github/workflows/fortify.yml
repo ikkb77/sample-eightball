@@ -57,7 +57,7 @@ jobs:
       - name: Setup Fortify tools
         uses: fortify/github-action/setup@main
         env:
-          SCANCENTRAL_JAVA_HOME: ${JAVA_HOME}
+          SCANCENTRAL_JAVA_HOME: "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.11-9/x64"
         with:
           tool-definitions: https://github.com/fortify/tool-definitions/releases/download/v1/tool-definitions.yaml.zip
           export-path: true
