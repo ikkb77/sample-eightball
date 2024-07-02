@@ -77,7 +77,7 @@ jobs:
           SC_SAST_SENSOR_VERSION: ${{ vars.SC_SAST_SENSOR_VERSION }}
         with:
           # cmd: '"${FCLI_CMD}" sc-sast scan start --publish-to "github_action:test1" -p package.zip -v "24.2.0.0150"'
-          cmd: '"${SC_CLIENT_CMD}" -url ${SC_CONTROLLER_URL} start -bt none'
+          cmd: '"${SC_CLIENT_CMD}" -url ${SC_CONTROLLER_URL} start -bt none -upload -application "github_action" -version "test1" -uptoken be43b308-5627-4c06-8c0d-c7331d2ede4e'
 #
 #      - name: Wait for SAST scan to complete-
 #        if: env.DO_WAIT == 'false' || env.DO_EXPORT == 'True'
