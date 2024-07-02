@@ -66,9 +66,9 @@ jobs:
           bugtracker-utility: skip
           debricked-cli: skip
       - name: Run fcli from PATH
-        run: fcli -V
+        run: sc-client -V
       - name: Run fcli using FCLI_CMD environment variable
-        run: ${FCLI_CMD} -V
+        run: ${SC_CLIENT_CMD} -V
 
 #      - name: Fortify SAST Login
 #        uses: fortify/github-action/internal/sc-sast-login@main
