@@ -60,6 +60,7 @@ jobs:
         with:
           tool-definitions: https://github.com/fortify/tool-definitions/releases/download/v1/tool-definitions.yaml.zip
           export-path: true
+          java-version: '11'
           fcli: skip
           sc-client: 24.2
           fod-uploader: skip
