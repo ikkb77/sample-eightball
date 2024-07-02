@@ -61,7 +61,8 @@ jobs:
           DO_EXPORT: true
           SSC_URL: ${{ secrets.SSC_URL }}
           SSC_TOKEN: ${{ secrets.SSC_TOKEN }}
-          # SC_SAST_TOKEN: ${{ secrets.SC_SAST_TOKEN }}
+          #SC_SAST_TOKEN: ${{ secrets.SC_SAST_TOKEN }}
+          SC_SAST_TOKEN: ""
           SC_SAST_SENSOR_VERSION: ${{ vars.SC_SAST_SENSOR_VERSION }}
 
       - name: Package for SAST-
