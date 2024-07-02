@@ -68,7 +68,7 @@ jobs:
           bugtracker-utility: skip
           debricked-cli: skip
       - name: Run fcli from PATH
-        run: echo ${JAVA_HOME} ${SCANCENTRAL_JAVA_HOME}
+        run: echo  ${SCANCENTRAL_JAVA_HOME}
       - name: Run fcli using FCLI_CMD environment variable
         run: ${SC_CLIENT_CMD} -h
 
