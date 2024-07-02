@@ -44,8 +44,7 @@ jobs:
           export-path: true
           fcli: skip
           sc-client: 23.2
-          fod-uploader: skip
-          vuln-exporter: skip
+          vuln-exporter: latest
           bugtracker-utility: skip
           debricked-cli: skip
       - name: Run fcli from PATH
@@ -78,7 +77,7 @@ jobs:
           SC_SAST_SENSOR_VERSION: ${{ vars.SC_SAST_SENSOR_VERSION }}
         with:
           # cmd: '"${FCLI_CMD}" sc-sast scan start --publish-to "github_action:test1" -p package.zip -v "24.2.0.0150"'
-          cmd: '"${SC_CLIENT_CMD}" -url ${SC_CONTROLLER_URL} start -bt none '
+          cmd: '"${SC_CLIENT_CMD}" -url ${SC_CONTROLLER_URL} start -bt none'
 #
 #      - name: Wait for SAST scan to complete-
 #        if: env.DO_WAIT == 'false' || env.DO_EXPORT == 'True'
@@ -89,6 +88,6 @@ jobs:
 #      - name: Logout from Fortify SAST
 #        uses: fortify/github-action/internal/sc-sast-logout@main
 #
-#      - name: Export SAST results to GitHub
-#        if: env.DO_EXPORT == 'True'
-#        uses: fortify/github-action/ssc-export@main
+      - name: Export SAST results to GitHub
+        if: env.DO_EXPORT == 'True'
+        uses: fortify/github-action/ssc-export@main
