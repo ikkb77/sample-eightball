@@ -55,7 +55,7 @@ jobs:
 #          fcli: action-default
 
       - name: Setup Fortify tools
-        uses: fortify/github-action/setup@main
+        uses: fortify/github-action/setup@1.2.2
         env:
           SCANCENTRAL_JAVA_HOME: "/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.11-9/x64"
         with:
