@@ -68,7 +68,7 @@ jobs:
       - name: Run fcli from PATH
         run: echo ${JAVA_HOME} ${FORTIFY_HOME} ${JAVA_HOME_17_X64} ${SCANCENTRAL_JAVA_HOME}
       - name: Run fcli using FCLI_CMD environment variable
-        run: ${SC_CLIENT_CMD} -h
+        run: /home/runner/work/_temp/fortify/tools/sc-client/24.2.0/bin/scancentral --version
 
 #      - name: Fortify SAST Login
 #        uses: fortify/github-action/internal/sc-sast-login@main
