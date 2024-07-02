@@ -59,8 +59,8 @@ jobs:
         env:
           DO_WAIT: false
           DO_EXPORT: true
-          SSC_URL: ${{ secrets.SSC_URL }}
-          SSC_TOKEN: ${{ secrets.SSC_TOKEN }}
+          SSC_URL: ${{ secrets.SSC_URL_kakaoent }}
+          SSC_TOKEN: ${{ secrets.SSC_TOKEN_kakaoent }}
           SC_SAST_TOKEN: ${{ secrets.SC_SAST_TOKEN }}
           SC_SAST_SENSOR_VERSION: ${{ vars.SC_SAST_SENSOR_VERSION }}
 
