@@ -56,6 +56,8 @@ jobs:
 
       - name: Setup Fortify tools
         uses: fortify/github-action/setup@main
+        env:
+          SCANCENTRAL_JAVA_HOME: ${JAVA_HOME}
         with:
           tool-definitions: https://github.com/fortify/tool-definitions/releases/download/v1/tool-definitions.yaml.zip
           export-path: true
@@ -68,7 +70,7 @@ jobs:
       - name: Run fcli from PATH
         run: echo ${JAVA_HOME} ${FORTIFY_HOME} ${JAVA_HOME_17_X64} ${SCANCENTRAL_JAVA_HOME}
       - name: Run fcli using FCLI_CMD environment variable
-        run: /home/runner/work/_temp/fortify/tools/sc-client/24.2.0/bin/scancentral --version
+        run: ${SC_CLIENT_CMD} -h
 
 #      - name: Fortify SAST Login
 #        uses: fortify/github-action/internal/sc-sast-login@main
