@@ -25,11 +25,11 @@ jobs:
         uses: actions/checkout@v4
 
       # Java is required to run the various Fortify utilities. Ensuring proper version is installed on the runner.
-      - name: Setup Java
-        uses: actions/setup-java@v4.2.1
-        with:
-          java-version: '21'
-          distribution: 'adopt-openj9'
+#      - name: Setup Java
+#        uses: actions/setup-java@v4.2.1
+#        with:
+#          java-version: '21'
+#          distribution: 'adopt-openj9'
 
       # Perform SAST and optionally SCA scan via Fortify on Demand/Fortify Hosted/Software Security Center, then
       # optionally export SAST results to the GitHub code scanning dashboard. In case further customization is
