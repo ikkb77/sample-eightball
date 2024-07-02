@@ -29,7 +29,7 @@ jobs:
         uses: actions/setup-java@v4.2.1
         with:
           java-version: '21'
-          distribution: 'adopt'
+          distribution: 'zulu'
 
       # Perform SAST and optionally SCA scan via Fortify on Demand/Fortify Hosted/Software Security Center, then
       # optionally export SAST results to the GitHub code scanning dashboard. In case further customization is
