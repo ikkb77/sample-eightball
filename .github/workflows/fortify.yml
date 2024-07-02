@@ -66,7 +66,7 @@ jobs:
           bugtracker-utility: skip
           debricked-cli: skip
       - name: Run fcli from PATH
-        run: sc-client -V
+        run: scancentral -V
       - name: Run fcli using FCLI_CMD environment variable
         run: ${SC_CLIENT_CMD} -V
 
