@@ -47,8 +47,8 @@ jobs:
       - name: Run scancentral using SC_CLIENT_CMD environment variable
         run: ${SC_CLIENT_CMD} -h
 
-      - name: Package for SAST
-        uses: fortify/github-action/package@main
+#      - name: Package for SAST
+#        uses: fortify/github-action/package@main
 
       - name: Start SAST scan
         uses: fortify/github-action/internal/run@main
