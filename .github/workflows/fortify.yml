@@ -33,11 +33,15 @@ jobs:
         with:
           tool-definitions: https://github.com/fortify/tool-definitions/releases/download/v1/tool-definitions.yaml.zip
           export-path: true
-          fcli: skip
-          sc-client: 24.2
+          fcli: latest
+          sc-client: latest
           vuln-exporter: latest
           bugtracker-utility: skip
           debricked-cli: skip
+      - name: Run fcli from PATH
+        run: fcli -V
+      - name: Run fcli using FCLI_CMD environment variable
+        run: ${FCLI_CMD} -V
       - name: Run scancentral from PATH
         run: scancentral --version
       - name: Run scancentral using SC_CLIENT_CMD environment variable
