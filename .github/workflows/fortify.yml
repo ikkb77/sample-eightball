@@ -56,4 +56,4 @@ jobs:
           SSC_TOKEN: ${{ secrets.SSC_TOKEN }}
           SSC_UPLOAD_TOKEN: ${{ secrets.SSC_UPLOAD_TOKEN }}
         with:
-          cmd: '"${SC_CLIENT_CMD}" -url ${SC_CONTROLLER_URL} start -bt none -upload -application "github_action" -version "test1" -uptoken ${SSC_UPLOAD_TOKEN}'
+          cmd: '"${SC_CLIENT_CMD}" -url ${SC_CONTROLLER_URL} start -bt none -block -o -f result.fpr -upload -application "github_action" -version "test1" -uptoken ${SSC_UPLOAD_TOKEN}'
