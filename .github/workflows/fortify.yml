@@ -46,10 +46,6 @@ jobs:
         run: scancentral --version
       - name: Run scancentral using SC_CLIENT_CMD environment variable
         run: ${SC_CLIENT_CMD} -h
-
-#      - name: Package for SAST
-#        uses: fortify/github-action/package@main
-
       - name: Start SAST scan
         uses: fortify/github-action/internal/run@main
         env:
@@ -68,4 +64,3 @@ jobs:
           SSC_URL: ${{secrets.SSC_URL}}
           SSC_TOKEN: ${{secrets.SSC_TOKEN}}
           SSC_APPVERSION: github_action:test1
-          # TOOL_DEFINITIONS: https://ftfy.mycompany.com/tool-definitions/v1/tool-definitions.yaml.zip
