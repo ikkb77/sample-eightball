@@ -47,7 +47,6 @@ jobs:
       - name: Run scancentral using SC_CLIENT_CMD environment variable
         run: ${SC_CLIENT_CMD} -h
 
-
       - name: Start SAST scan
         uses: fortify/github-action/internal/run@main
         env:
@@ -60,8 +59,7 @@ jobs:
         with:
           cmd: '"${SC_CLIENT_CMD}" -url ${SC_CONTROLLER_URL} start -bt none -upload -application "github_action" -version "test1" -uptoken ${SSC_UPLOAD_TOKEN}'
 
-
-      - name: Export SSC vulnerability data to GitHub
+      - name: Export SSC vulnerability data to GitHub Code Security Dashboard
         uses: fortify/github-action/ssc-export@v1
         env:
           SSC_URL: ${{secrets.SSC_URL}}
